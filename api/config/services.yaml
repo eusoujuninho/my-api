@@ -22,3 +22,47 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    # Services
+    App\Service\UserService:
+        autowire: true
+    
+    # State processors configuration
+    App\State\UserProcessor:
+        arguments:
+            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+            $userService: '@App\Service\UserService'
+    
+    App\State\RoleProcessor:
+        arguments:
+            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+    
+    App\State\PermissionProcessor:
+        arguments:
+            $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+            
+    App\State\UserBulkImportProcessor:
+        arguments:
+            $userService: '@App\Service\UserService'
+            
+    App\State\UserProfileProcessor:
+        arguments:
+            $userRepository: '@App\Repository\UserRepository'
+            $userService: '@App\Service\UserService'
+            
+    App\State\UserRelationProcessor:
+        arguments:
+            $userRepository: '@App\Repository\UserRepository'
+            $userService: '@App\Service\UserService'
+            $security: '@Symfony\Bundle\SecurityBundle\Security'
+    
+    # State providers configuration
+    App\State\UserProvider:
+        arguments:
+            $itemProvider: '@api_platform.doctrine.orm.state.item_provider'
+            $userService: '@App\Service\UserService'
+            
+    App\State\UserRelationProvider:
+        arguments:
+            $userRepository: '@App\Repository\UserRepository'
+            $userService: '@App\Service\UserService'
